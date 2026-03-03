@@ -1,4 +1,4 @@
-# RGB Binary Clock v1.1 for Arduino (Legacy, 12 hour format) with RTC and I2C LCD support 🕓
+# RGB Binary Clock v1.1 for Arduino with RTC and I2C LCD support 🕓
 
 <img align="right" src="rgb-led-example.gif"  width="368" height="316"/>
 
