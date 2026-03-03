@@ -1,23 +1,18 @@
-# RGB Binary Clock for Arduino (Legacy, 12 hour format) 🕓
+# RGB Binary Clock v1.1 for Arduino (Legacy, 12 hour format) with RTC and I2C LCD support 🕓
 
 <img align="right" src="rgb-led-example.gif"  width="368" height="316"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
-The hardware setup is minimal: Arduino Nano, 6 RGB LEDs, resistors and a switch.
+I have updated it to also include support for RTC, I2C LCD and time adjustment via the Serial Monitor.
 
-The project includes basic time output via the serial interface at 9600 baud.
+The hardware setup is minimal: Arduino Nano, 6 RGB LEDs, resistors and RTC DS3231/DS3232. The I2C LCD is a useful addition if you want to learn binary values.
+
+The project outputs date, time, and temperature data via the Serial Monitor at a baud rate of 9600.
 
 Pins are easily configurable for additional LEDs in the following arrays: `hourLEDs[]`, `minuteLEDs[]`, `secondLEDs[]` and `loopLEDs[]`.
 
-A switch is used to accelerate time for setting purposes.
-
-The project relies on the Arduino Time library by Michael Margolis:
-[https://github.com/PaulStoffregen/Time](https://github.com/PaulStoffregen/Time)
-
-Using the Arduino Library Manager, install "*Time* by *Michael Margolis*".
-
-If an error occurs with Time.h, remove it and use TimeLib.h only.
+Using the Arduino Library Manager, install "*Time* by *Michael Margolis*", "*DS3232RTC* by *Jack Christensen*" and "*LiquidCrystal_I2C* by *Martin Kubovčík*".
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
 6 RGB LEDs. Each RGB LED represents a combination of hours, minutes and seconds.
@@ -54,10 +49,21 @@ Hours start from the **3rd LED**: 1, 2, 4, 8.
 
 You can physically rearrange the LEDs or adjust it in the code.
 
-For full functionality, you could add a **DS3231/DS1307 module** and [DS1307RTC library][1] or another real-time clock to keep accurate time.
+## How to change the time via the Serial monitor? 🛠️
 
-[1]:<https://github.com/PaulStoffregen/DS1307RTC>
+<img src="serial-monitor.gif"/>
+
+The 24H version uses the format: HH MM SS DD MM YYYY
+
+For example, entering "15 35 00 03 04 2026" (no quotes) sets the time to 15:35:00 on 3.4.2026.
+
+
+The AM/PM US version uses the format: HH MM SS AM_PM MM DD YYYY
+
+For example, entering "03 35 00 1 04 03 2026" (no quotes) sets the time to 03:35:00 PM on 4/3/2026.
+AM_PM parameter:
+AM = 0
+PM = 1
 
 ## License 📄
-
 [MIT](LICENSE)
