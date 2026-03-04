@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RGB Binary Clock v1.1 by Marek Bujko</title>
+    <style>
+        body { 
+            background: #000; color: #eee; font-family: 'Courier New', monospace;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            min-height: 100vh; margin: 0; padding: 20px;
+        }
+
+        /* Toggle INT/US */
+        .toggle-zone {
+            margin-bottom: 25px; background: #111; padding: 10px 20px;
+            border-radius: 30px; border: 1px solid #333; display: flex; align-items: center; gap: 15px;
+            font-size: 0.8rem; color: #888;
+        }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #222; transition: .3s; border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px;
+            left: 3px; bottom: 3px; background-color: #555; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #444; }
+        input:checked + .slider:before { transform: translateX(20px); background-color: #fff; }
+
+        .case {
+            background: #0a0a0a; padding: 40px; border-radius: 12px;
+            border: 1px solid #151515; text-align: center; margin-bottom: 20px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .led-row { display: flex; gap: 20px; flex-direction: row-reverse; margin-bottom: 40px; }
+        .led-unit { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .led {
+            width: 55px; height: 55px; border-radius: 50%; 
+            background-color: #000; border: 1px solid #000; 
+            transition: background-color 0.1s, box-shadow 0.1s;
+        }
+
+        /* Color-coded labels under LEDs */
+        .bit-info { font-size: 10px; font-weight: bold; line-height: 1.3; }
+        .h-bit { color: #ff4444; } /* Red */
+        .m-bit { color: #44ff44; } /* Green */
+        .s-bit { color: #4444ff; } /* Blue */
+        .divider { color: #333; }
+
+        #lcd {
+            background: #001100; color: #00ff00; padding: 15px 25px;
+            border-radius: 2px; border: 4px solid #1a1a1a; width: 280px;
+            height: 60px; /* Fixed height */
+            text-align: left; font-size: 1.25rem; font-family: 'Consolas', monospace;
+            box-shadow: inset 0 0 20px #000; line-height: 1.3;
+            margin: 0 auto 25px auto; text-transform: uppercase;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        .stats-info {
+            margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr);
+            font-size: 0.75rem; border-top: 1px solid #111; padding-top: 15px; width: 100%;
+        }
+        .val { display: block; font-size: 1.1rem; color: #888; margin-top: 4px; font-weight: bold; }
+        
+        .h-c { color: #ff4444; } 
+        .m-c { color: #44ff44; } 
+        .s-c { color: #4444ff; }
+
+        .serial-monitor {
+            background: #111; padding: 15px; border-radius: 8px; 
+            border: 1px solid #333; width: 340px; text-align: center;
+        }
+        .serial-monitor label { font-size: 0.7rem; color: #666; display: block; margin-bottom: 8px; }
+        .serial-monitor input {
+            background: #000; border: 1px solid #444; color: #0f0;
+            padding: 8px; width: 60%; font-family: monospace; outline: none; border-radius: 3px;
+        }
+        .serial-monitor button {
+            background: #222; color: #fff; border: 1px solid #444; padding: 8px 12px;
+            cursor: pointer; font-family: monospace; transition: 0.2s; border-radius: 3px;
+        }
+        .serial-monitor button:hover { background: #333; color: #0f0; }
+    </style>
+</head>
+<body>
+    <div class="main-title">RGB Binary Clock v1.1</div>
+    <br>
+    <div class="toggle-zone">
+        <span>INT MODE</span>
+        <label class="switch"><input type="checkbox" id="langToggle"><span class="slider"></span></label>
+        <span>US MODE</span>
+    </div>
+
+    <div class="case">
+        <div class="led-row">
+            <div class="led-unit">
+                <div id="led-0" class="led"></div>
+                <div class="bit-info"><span class="m-bit">M1</span><span class="divider">/</span><span class="s-bit">S1</span></div>
+            </div>
+            <div class="led-unit">
+                <div id="led-1" class="led"></div>
+                <div class="bit-info"><span class="m-bit">M2</span><span class="divider">/</span><span class="s-bit">S2</span></div>
+            </div>
+            <div class="led-unit">
+                <div id="led-2" class="led"></div>
+                <div class="bit-info"><span class="h-bit">H1</span><br><span class="m-bit">M4</span><span class="divider">/</span><span class="s-bit">S4</span></div>
+            </div>
+            <div class="led-unit">
+                <div id="led-3" class="led"></div>
+                <div class="bit-info"><span class="h-bit">H2</span><br><span class="m-bit">M8</span><span class="divider">/</span><span class="s-bit">S8</span></div>
+            </div>
+            <div class="led-unit">
+                <div id="led-4" class="led"></div>
+                <div class="bit-info"><span class="h-bit">H4</span><br><span class="m-bit">M16</span><span class="divider">/</span><span class="s-bit">S16</span></div>
+            </div>
+            <div class="led-unit">
+                <div id="led-5" class="led"></div>
+                <div class="bit-info"><span class="h-bit">H8</span><br><span class="m-bit">M32</span><span class="divider">/</span><span class="s-bit">S32</span></div>
+            </div>
+        </div>
+
+        <div id="lcd">
+            <div id="row1">00:00:00 23.4°C</div>
+            <div id="row2">04.03.2026</div>
+        </div>
+
+        <div class="stats-info">
+            <div class="h-c">HRS (R)<span id="val-h" class="val">0</span></div>
+            <div class="m-c">MIN (G)<span id="val-m" class="val">0</span></div>
+            <div class="s-c">SEC (B)<span id="val-s" class="val">0</span></div>
+        </div>
+    </div>
+
+    <div class="serial-monitor">
+        <label id="serial-label">Format: HH MM SS DD MM YYYY</label>
+        <input type="text" id="serialInput" placeholder="Command...">
+        <button onclick="parseSerial()">SEND</button>
+    </div>
+    
+    <div class="copyright-footer">
+    <br>
+    &copy; 2026 Marek Bujko
+    </div>
+
+    <script>
+        let isBooting = true;
+        setTimeout(() => { isBooting = false; }, 2000);
+            
+        const langToggle = document.getElementById('langToggle');
+        let virtualOffset = 0; 
+        let updateMsgTime = 0;
+        let baseTemp = 23.4;
+
+        function parseSerial() {
+            const input = document.getElementById('serialInput').value.trim();
+            const p = input.split(/\s+/).map(Number);
+            const isUS = langToggle.checked;
+            let target = new Date();
+
+        // Basic serial parsing logic
+        if (!isUS && p.length >= 6) {
+            let year = p[5];
+            if (year < 100) year += 2000;
+            target = new Date(year, p[4]-1, p[3], p[0], p[1], p[2]);
+        } else if (isUS && p.length >= 6) {
+            let h = p[0];
+            let amPm = (p.length >= 7) ? p[3] : 0;
+            let month = p[4];
+            let day = p[5];
+            let year = (p.length >= 7) ? p[6] : p[5];
+            if (amPm === 1 && h < 12) h += 12;
+            if (amPm === 0 && h === 12) h = 0;
+            
+            if (year < 100) year += 2000;
+            target = new Date(year, month-1, day, h, p[1], p[2]);
+        } else {
+                alert("Invalid format!"); return;
+            }
+            virtualOffset = target.getTime() - Date.now();
+            updateMsgTime = 3; 
+            document.getElementById('serialInput').value = "";
+        }
+
+        function update() {
+            const isUS = langToggle.checked;
+            document.getElementById('serial-label').innerText = isUS ? 
+                "Format: HH MM SS AM_PM MM DD YYYY (0=AM, 1=PM)" : 
+                "Format: HH MM SS DD MM YYYY";
+
+            const now = new Date(Date.now() + virtualOffset);
+            let h24 = now.getHours(), h12 = h24 % 12 || 12, m = now.getMinutes(), s = now.getSeconds();
+            let isPM = h24 >= 12;
+            
+            let baseTemp = 23.4;
+            let tempC = baseTemp + (Math.sin(Date.now() / 15000) * 1.5);
+
+            const r1 = document.getElementById('row1');
+            const r2 = document.getElementById('row2');
+            
+            if (isBooting) {
+            r1.innerText = "RGB Clock v1.1";
+            r2.innerText = "(c) Marek Bujko";
+                
+            for (let i = 0; i < 6; i++) {
+            const led = document.getElementById(`led-${i}`);
+            led.style.backgroundColor = "#000";
+            led.style.boxShadow = "none";
+                }
+                return;
+            }
+
+            if (updateMsgTime > 0) {
+                r1.innerText = "TIME UPDATED!";
+                r2.innerText = "\u00A0"; // Non-breaking space keeps line height
+                updateMsgTime--;
+            } else {
+                const d = String(now.getDate()).padStart(2,'0'), mo = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+                if (isUS) {
+                    r1.innerText = `${String(h12).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${isPM?'PM':'AM'}`;
+                    r2.innerText = `${mo}/${d}/${y} ${Math.round(tempC*1.8+32)}°F`;
+                } else {
+                    r1.innerText = `${String(h24).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${tempC.toFixed(1)}°C`;
+                    r2.innerText = `${d}.${mo}.${y}`;
+                }
+            }
+
+            document.getElementById('val-h').innerText = h12;
+            document.getElementById('val-m').innerText = m;
+            document.getElementById('val-s').innerText = s;
+
+            for (let i = 0; i < 6; i++) {
+                const led = document.getElementById(`led-${i}`);
+                const hBit = (i >= 2) ? (h12 >> (i - 2)) & 1 : 0;
+                const mBit = (m >> i) & 1, sBit = (s >> i) & 1;
+                const r = hBit ? 255:0, g = mBit ? 255:0, b = sBit ? 255:0;
+
+                if (!r && !g && !b) {
+                    led.style.backgroundColor = "#000"; led.style.boxShadow = "none"; led.style.borderColor = "#000";
+                } else {
+                    const color = `rgb(${r},${g},${b})`;
+                    led.style.backgroundColor = color;
+                    led.style.boxShadow = `0 0 ${(r+g+b===765)?32:18}px 4px rgba(${r},${g},${b},0.6)`;
+                    led.style.borderColor = `rgba(${r},${g},${b},0.2)`;
+                }
+            }
+        }
+        setInterval(update, 1000); update();
+    </script>
+</body>
+</html>
