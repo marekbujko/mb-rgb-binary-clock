@@ -1,5 +1,7 @@
 # RGB Binary Clock v1.1 for Arduino with RTC and I2C LCD support 🕓
 
+Try the [RGB Binary Clock v1.1 simulator](https://marekbujko.github.io/mb-rgb-binary-clock/)!
+
 <img align="right" src="rgb-led-example.gif"  width="368" height="316"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
