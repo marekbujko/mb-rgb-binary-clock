@@ -8,7 +8,7 @@ I have updated it to also include support for RTC, I2C LCD and time adjustment v
 
 The hardware setup is minimal: Arduino Nano, 6 RGB LEDs, resistors and RTC DS3231/DS3232. The I2C LCD is a useful addition if you want to learn binary values or just display the time with the date and temperature.
 
-The project outputs date, time and temperature data via the Serial Monitor at a baud rate of 9600.
+The project outputs date, time and temperature data via the Serial Monitor at a baud rate of 115200.
 
 Pins are easily configurable for additional LEDs in the following arrays: `hourLEDs[]`, `minuteLEDs[]`, `secondLEDs[]` and `loopLEDs[]`.
 
