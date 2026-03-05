@@ -86,21 +86,21 @@
         .serial-monitor button:hover { background: #333; color: #0f0; }
         
         .danger-btn {
-    background: #222; /* Matches your other buttons */
-    color: #fff;
-    border: 1px solid #444;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-family: monospace;
-    transition: 0.2s;
-    border-radius: 3px;
-    margin-top: 5px;
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-family: monospace;
+        transition: 0.2s;
+        border-radius: 3px;
+        margin-top: 5px;
 }
 
         .danger-btn:hover {
-    color: #ff4444 !important; /* Red text on hover */
-    border-color: #ff4444;
-    background: #1a0000;
+        color: #ff4444 !important; /* Red text on hover */
+        border-color: #ff4444;
+        background: #1a0000;
 }
 #dots-btn {
     width: 40px;
@@ -314,7 +314,7 @@ async function readSerialData() {
                     let lastLine = lines[lines.length - 2]; 
                     
                     // Regex for US (Integer F) and INT (Float C)
-const usMatch = lastLine.match(/(\d{2})\/(\d{2})\/(\d{4})\s*\|\s*(\d{2}):(\d{2}):(\d{2})\s*(AM|PM)\s*\|\s*Temp:\s*([\d.]+)\s*F/);
+                    const usMatch = lastLine.match(/(\d{2})\/(\d{2})\/(\d{4})\s*\|\s*(\d{2}):(\d{2}):(\d{2})\s*(AM|PM)\s*\|\s*Temp:\s*([\d.]+)\s*F/);
                     const intMatch = lastLine.match(/(\d{2})\.(\d{2})\.(\d{4})\s*\|\s*(\d{2}):(\d{2}):(\d{2})\s*\|\s*Temp:\s*([\d.]+)\s*C/);
 
                     if (usMatch) {
