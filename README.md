@@ -3,7 +3,7 @@
 Try the [RGB Binary Clock v1.1 simulator](https://marekbujko.github.io/mb-rgb-binary-clock/) with Arduino COM port support!
 (It is currently unavailable. Maintenance is underway. A new version will be released.)
 
-<img align="right" src="rgb-led-example.gif"  width="368" height="316"/>
+<img align="right" src="Images/rgb-led-example.gif"  width="368" height="316"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
@@ -24,7 +24,7 @@ Each RGB LED has three colors: red, green and blue. By mixing these colors, you 
 
 The **1st and 2nd LEDs** can only represent minutes and seconds.
 
-<img src="rgb-binary-clock-logic.png"/>
+<img src="Images/rgb-binary-clock-logic.png"/>
 
 For example, in the table above, the LED colors correspond to a specific time:
 1. Green
@@ -54,7 +54,7 @@ You can physically rearrange the LEDs or adjust it in the code.
 
 ## How to change the time via the Serial monitor? 🛠️
 
-<img src="serial-monitor.gif"/>
+<img src="Images/serial-monitor.gif"/>
 
 The 24H version uses the format: HH MM SS DD MM YYYY
 
