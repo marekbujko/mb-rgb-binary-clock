@@ -1,0 +1,243 @@
+#include <DS3232RTC.h>    // Install "DS3232RTC" by Jack Christensen
+#include <TimeLib.h>      // Install "Time" by Paul Stoffregen
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h> // Install "LiquidCrystal_I2C" by Martin Kubovčík
+
+DS3232RTC RTC;
+LiquidCrystal_I2C lcd(0x3F, 16, 2); // I2C settings for your LCD
+
+time_t getTajms() {
+    return RTC.get();
+}
+
+// Pin 19 (A5) released for RTC SCL. Last LED moved from pin 19 to pin 17 (A3).
+const uint8_t hourLEDs [] = {4,3,2,17}; 
+const uint8_t minuteLEDs [] = {10,9,8,7,6,5};  
+const uint8_t secondLEDs [] = {16,15,14,13,12,11};  
+const uint8_t loopLEDs[] = {16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,17};
+int lastSecond = -1;
+
+// spin millis
+bool isSpinning = false;
+unsigned long lastSpinMillis = 0;
+uint8_t spinIdx = 0;
+uint16_t totalSteps = 0;
+uint16_t currentStep = 0;
+
+void setup()
+{
+  Wire.begin();
+  // Wire.setClock(400000);
+  Serial.begin(115200); // initialize Serial communication 115200 baud and No line ending
+  // while(!Serial);
+
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print(F("RGB Clock v1.1"));
+  lcd.setCursor(0, 1);
+  lcd.print(F("(c) Marek Bujko"));
+  delay(2000);
+  lcd.clear();
+
+  Serial.println(F("============================================"));
+  Serial.println(F("Project: RGB Binary Clock v1.1 (US)"));
+  Serial.println(F("Copyright Marek Bujko"));
+  Serial.println(F("Licensed under MIT License"));
+  Serial.println(F("Format to set: HH MM SS AM_PM MM DD YYYY"));
+  Serial.println(F("AM_PM: 0 = AM, 1 = PM"));
+  Serial.println(F("Example: 02 30 00 1 12 25 2026 (2:30:00 PM)"));
+  Serial.println(F("============================================"));
+
+  setSyncProvider(getTajms);
+
+  if (timeStatus() != timeSet) {
+    Serial.println(F("RTC Sync Error!"));
+    lcd.setCursor(0, 0);
+    lcd.print(F("RTC Sync Error!"));
+  } else {
+    Serial.print(F("RTC Sync OK! Current: "));
+    
+    // US Startup Date: MM/DD/YYYY
+    if (month() < 10) Serial.print('0'); Serial.print(month());
+    Serial.print('/');
+    if (day() < 10) Serial.print('0'); Serial.print(day());
+    Serial.print('/'); Serial.print(year());
+    
+    Serial.print(F(" | "));
+
+    // US Startup Time: 12h AM/PM
+    int h = hour();
+    bool isPM = (h >= 12);
+    if (h > 12) h -= 12;
+    if (h == 0) h = 12;
+    if (h < 10) Serial.print('0'); Serial.print(h);
+    Serial.print(':');
+    if (minute() < 10) Serial.print('0'); Serial.print(minute());
+    Serial.print(':');
+    if (second() < 10) Serial.print('0'); Serial.print(second());
+    Serial.println(isPM ? F(" PM") : F(" AM"));
+  }
+  
+  for (uint8_t i = 0; i<4; i++)
+  {
+    pinMode(hourLEDs[i], OUTPUT);
+  }
+  for (uint8_t i = 0; i<6; i++)
+  {
+    pinMode(minuteLEDs[i], OUTPUT);
+  }
+  for (uint8_t i = 0; i<6; i++)
+  {
+    pinMode(secondLEDs[i], OUTPUT);
+  }
+ }
+
+void loop(){
+  // US Input Logic: HH MM SS AM_PM MM DD YYYY
+  if (Serial.available() > 0) {
+    int h    = Serial.parseInt(); 
+    int m    = Serial.parseInt(); 
+    int s    = Serial.parseInt(); 
+    int p    = Serial.parseInt(); // 0 = AM, 1 = PM
+    int mo   = Serial.parseInt(); // Month first
+    int d    = Serial.parseInt(); // Day second
+    int y    = Serial.parseInt(); 
+
+    // Convert 12h input + AM/PM to 24h for RTC storage
+    if (p == 1 && h < 12) h += 12; // PM case
+    if (p == 0 && h == 12) h = 0;  // 12 AM case (midnight)
+
+    if (h >= 0 && h < 24) {
+      tmElements_t tm;
+      tm.Hour = h; tm.Minute = m; tm.Second = s;
+      tm.Month = (mo > 0) ? mo : month();
+      tm.Day = (d > 0) ? d : day();
+      if (y > 0) {
+        if (y < 100) y += 2000; 
+        tm.Year = CalendarYrToTm(y);
+      } else {
+        tm.Year = CalendarYrToTm(year());
+      }
+      RTC.write(tm);
+      setTime(makeTime(tm));
+      Serial.println(F("* Date and time updated via Serial (US Format) *"));
+
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print(F("Time updated!"));
+      delay(1000);
+      lcd.clear();
+    }
+    while(Serial.available() > 0) Serial.read(); // Clear buffer
+  }
+
+  updateSpin();
+
+  int s = second();
+  if (s != lastSecond) {
+
+    if (minute() == 0 && s == 0 && !isSpinning) {
+      startSpin(hour());
+    }
+ 
+    if (!isSpinning) {
+      updateDisplay();
+    }
+
+    // Date: MM/DD/YYYY
+    if (month() < 10) Serial.print('0'); Serial.print(month());
+    Serial.print('/');
+    if (day() < 10) Serial.print('0'); Serial.print(day());
+    Serial.print('/'); Serial.print(year());
+    
+    Serial.print(F(" | "));
+
+    // Time: 12h Format with AM/PM
+    int h24 = hour();
+    int h12 = h24;
+    bool isPM = (h24 >= 12);
+    if (h12 > 12) h12 -= 12;
+    if (h12 == 0) h12 = 12;
+
+    if (h12 < 10) Serial.print('0'); Serial.print(h12);
+    Serial.print(':');
+    if (minute() < 10) Serial.print('0'); Serial.print(minute());
+    Serial.print(':');
+    if (s < 10) Serial.print('0'); Serial.print(s);
+    Serial.print(isPM ? F(" PM") : F(" AM"));
+
+    // Print Temperature (DS3231/DS3232 RTC)
+    float tempC = RTC.temperature() / 4.0;
+    float tempF = (tempC * 9.0 / 5.0) + 32.0;
+    Serial.print(F(" | Temp: ")); Serial.print(tempF); Serial.println(F(" F"));
+
+    lcd.setCursor(0, 0);
+    if (h12 < 10) lcd.print('0'); lcd.print(h12);
+    lcd.print(':');
+    if (minute() < 10) lcd.print('0'); lcd.print(minute());
+    lcd.print(':');
+    if (s < 10) lcd.print('0'); lcd.print(s);
+    lcd.print(isPM ? F(" PM") : F(" AM"));
+
+    lcd.setCursor(0, 1);
+    if (month() < 10) lcd.print('0'); lcd.print(month());
+    lcd.print('/');
+    if (day() < 10) lcd.print('0'); lcd.print(day());
+    lcd.print('/');
+    lcd.print(year());
+    
+    lcd.print(F(" "));
+    lcd.print((int)tempF); 
+    lcd.print((char)223);
+    lcd.print(F("F"));
+
+    lastSecond = s;
+  }
+}
+
+void updateDisplay() {
+  time_t t = now();
+  int h = hour(t);
+  if (h > 12) h -= 12;
+  if (h == 0) h = 12; 
+
+  setOutput(hourLEDs, 4, h);
+  setOutput(minuteLEDs, 6, minute(t));
+  setOutput(secondLEDs, 6, second(t));
+}
+
+void setOutput(const uint8_t *ledArray, uint8_t numLEDs, int value) {
+  for (uint8_t i = 0; i < numLEDs; i++) {
+    digitalWrite(ledArray[i], bitRead(value, i));
+  }
+}
+
+void startSpin(int count) {
+  int loops = (count == 0) ? 12 : (count > 12 ? count - 12 : count);
+  totalSteps = loops * 16;
+  currentStep = 0;
+  spinIdx = 0;
+  isSpinning = true;
+}
+
+void updateSpin() {
+  if (!isSpinning) return;
+
+  if (millis() - lastSpinMillis >= 30) {
+    lastSpinMillis = millis();
+
+    for(uint8_t i=0; i<16; i++) digitalWrite(loopLEDs[i], LOW);
+
+    digitalWrite(loopLEDs[spinIdx], HIGH);
+
+    spinIdx = (spinIdx + 1) % 16;
+    currentStep++;
+
+    if (currentStep >= totalSteps) {
+      digitalWrite(loopLEDs[spinIdx], LOW);
+      isSpinning = false;
+    }
+  }
+}
+// Copyright Marek Bujko
