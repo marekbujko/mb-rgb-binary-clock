@@ -1,6 +1,7 @@
 # RGB Binary Clock v1.1 for Arduino with RTC and I2C LCD support 🕓
 
 Try the [RGB Binary Clock v1.1 simulator](https://marekbujko.github.io/mb-rgb-binary-clock/) with Arduino COM port support!
+(It is currently unavailable. Maintenance is underway. A new version will be released.)
 
 <img align="right" src="rgb-led-example.gif"  width="368" height="316"/>
 
