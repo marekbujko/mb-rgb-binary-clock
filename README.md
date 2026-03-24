@@ -13,9 +13,6 @@ The hardware setup is minimal: Arduino Nano, 6 RGB LEDs, resistors and RTC DS323
 
 The project outputs date, time and temperature data via the Serial Monitor at a baud rate of 115200.
 
-Pins are easily configurable for additional LEDs in the following arrays: `hourLEDs[]`, `minuteLEDs[]`, `secondLEDs[]` and `loopLEDs[]`.
-
-Using the Arduino Library Manager, install "*Time* by *Michael Margolis*", "*DS3232RTC* by *Jack Christensen*" and "*LiquidCrystal_I2C* by *Martin Kubovčík*".
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
 6 RGB LEDs. Each RGB LED represents a combination of hours, minutes and seconds.
