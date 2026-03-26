@@ -52,21 +52,5 @@ Hours start from the **3rd LED**: 1, 2, 4, 8.
 
 You can physically rearrange the LEDs or adjust it in the code.
 
-## How to change the time via the Serial monitor? 🛠️
-
-<img src="Images/serial-monitor.gif"/>
-
-The 24H version uses the format: HH MM SS DD MM YYYY
-
-For example, entering "15 35 00 03 04 2026" (no quotes) sets the time to 15:35:00 on 3.4.2026.
-
-
-The AM/PM US version uses the format: HH MM SS AM_PM MM DD YYYY
-
-For example, entering "03 35 00 1 04 03 2026" (no quotes) sets the time to 03:35:00 PM on 4/3/2026.
-AM_PM parameter:
-AM = 0
-PM = 1
-
 ## License 📄
 [MIT](LICENSE)
