@@ -1,18 +1,21 @@
-# RGB Binary Clock v1.1 for Arduino with RTC and I2C LCD support 🕓
-
-Try the [RGB Binary Clock v1.1 simulator](https://marekbujko.github.io/mb-rgb-binary-clock/) with Arduino COM port support!
-(It is currently unavailable. Maintenance is underway.)
+# RGB Binary Clock v1.2.8 for Arduino 🕓
+Try the RGB Binary Clock v1.2.8 Web UI with Arduino COM port support!
+(It is currently unavailable.)
 
 <img align="right" src="Images/rgb-led-example.gif"  width="368" height="316"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
-I have updated it to also include support for RTC, I2C LCD and time adjustment via the Serial Monitor.
+The hardware requires for proper functionality:
+Arduino Nano, 6 RGB LEDs with resistors
 
-The hardware setup is minimal: Arduino Nano, 6 RGB LEDs, resistors and RTC DS3231/DS3232. The I2C LCD is a useful addition if you want to learn binary values or just display the time with the date and temperature.
+I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio)
 
-The project outputs date, time and temperature data via the Serial Monitor at a baud rate of 115200.
+Active buzzer, PS2 joystick, PCA8574 I2C IO expansion board module
 
+Optional I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
+
+The project outputs various data, such as date, time and temperature, via the Serial Monitor at a baud rate of 115200 and includes a Web UI for full control, which also supports the Novation Launchpad X!
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
 6 RGB LEDs. Each RGB LED represents a combination of hours, minutes and seconds.
