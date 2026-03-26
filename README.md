@@ -7,7 +7,7 @@ Try the RGB Binary Clock v1.2.8 Web UI with Arduino COM port support!
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
 The hardware requires for proper functionality:
-Arduino Nano, 6 RGB LEDs with resistors
+Arduino Nano, 6x RGB LEDs with resistors
 
 I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio), PCA8574 I2C IO expansion board
 
