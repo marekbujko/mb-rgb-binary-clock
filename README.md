@@ -9,9 +9,9 @@ This repository contains my RGB Binary Clock project for the Arduino Nano, origi
 The hardware requires for proper functionality:
 Arduino Nano, 6 RGB LEDs with resistors
 
-I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio)
+I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio), PCA8574 I2C IO expansion board
 
-Active buzzer, PS2 joystick, PCA8574 I2C IO expansion board module
+Active buzzer, PS2 joystick
 
 Optional I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
 
