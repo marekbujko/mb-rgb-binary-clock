@@ -15,6 +15,7 @@ Active buzzer, PS2 joystick
 
 Optional I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
 
+
 The project outputs various data, such as date, time and temperature, via the Serial Monitor at a baud rate of 115200 and includes a Web UI for full control, which also supports the Novation Launchpad X!
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
