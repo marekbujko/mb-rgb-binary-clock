@@ -1,6 +1,6 @@
 # RGB Binary Clock v1.2.8 for Arduino 🕓
 Try the RGB Binary Clock v1.2.8 Web UI with Arduino COM port support!
-(It is currently unavailable.)
+(It is currently unavailable. The GIF animation on the right shows the beginning of my revived project from a few years ago.)
 
 <img align="right" src="Images/rgb-led-example.gif"  width="368" height="316"/>
 
