@@ -2,7 +2,7 @@
 Try the RGB Binary Clock v1.2.9 Web UI with Arduino COM port support!
 (It is currently unavailable, on request.)
 
-<img src="Images/WebUI.png"/>
+<img src="Images/WebUI.gif"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
