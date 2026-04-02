@@ -1,8 +1,8 @@
-# RGB Binary Clock v1.2.8 for Arduino 🕓
-Try the RGB Binary Clock v1.2.8 Web UI with Arduino COM port support!
-(It is currently unavailable, on request. The GIF animation on the right shows the beginning of my revived project.)
+# RGB Binary Clock v1.2.9 for Arduino 🕓
+Try the RGB Binary Clock v1.2.9 Web UI with Arduino COM port support!
+(It is currently unavailable, on request.)
 
-<img align="right" src="Images/rgb-led-example.gif"  width="368" height="316"/>
+<img src="Images/WebUI.png"/>
 
 This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
 
@@ -14,7 +14,12 @@ I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio), PCA8574 I2C IO expansion b
 
 Active buzzer, PS2 joystick
 
-Optional I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
+
+Optional
+
+I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
+
+RF: LoRa MeshCore Companion Radio Clients
 
 The project outputs various data via the Serial Monitor at a baud rate of 115200 and includes a Web UI for full control, which also supports the Novation Launchpad X!
 
