@@ -23,7 +23,7 @@ RF: LoRa MeshCore Companion Radio Clients
 
 The project outputs various data via the Serial Monitor at a baud rate of 115200 and includes a Web UI for full control, which also supports the Novation Launchpad X!
 
-Arduino firmware also includes a built-in mini menu (FM radio, sensors, Web UI control) controlled via a PS2 joystick module.
+My Arduino firmware also includes a built-in mini menu (FM radio, sensors, Web UI control) controlled via a PS2 joystick module.
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
 6 RGB LEDs. Each RGB LED represents a combination of hours, minutes and seconds.
