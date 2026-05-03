@@ -1,4 +1,7 @@
 # RGB Binary Clock v1.2.9 for Arduino 🕓
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit/)
+[![GitHub stars](https://img.shields.io/github/stars/marekbujko/mb-rgb-binary-clock?style=social)](https://github.com/marekbujko/mb-rgb-binary-clock/stargazers)
+
 Try the RGB Binary Clock v1.2.9 Web UI with Arduino COM port support!
 (It is currently unavailable, on request.)
 
