@@ -11,8 +11,8 @@ This repository contains a modernized version of my original RGB Binary Clock pr
 
 
 **Size**
-* **Arduino Nano (ATmega328P):** 30 KB
-* **Web UI:** 650 KB
+* **Arduino Nano (ATmega328P):** 30 kB
+* **Web UI:** 650 kB
 
 
 
