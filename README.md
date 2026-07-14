@@ -7,7 +7,8 @@ Try the RGB Binary Clock v1.2.9 Web UI with Arduino COM port support!
 
 <img src="Images/WebUI.gif"/>
 
-This repository contains my RGB Binary Clock project for the Arduino Nano, originally created many years ago.
+This repository contains a modernized version of my original RGB Binary Clock project for the Arduino Nano, featuring numerous improvements and new functionality.
+
 
 **Size**
 * **Arduino Nano (ATmega328P):** 30 KB
@@ -30,16 +31,16 @@ This repository contains my RGB Binary Clock project for the Arduino Nano, origi
 
 * RF: LoRa MeshCore Companion Radio Clients
 
-The project outputs various data via the Serial Monitor at a baud rate of 115200 and includes a Web UI for full control, which also supports the Novation Launchpad X!
+The project outputs various data through the Serial Monitor at a baud rate of 115200 and includes a Web UI for complete control, with support for the Novation Launchpad X!
 
-My Arduino firmware also includes a built-in mini menu (FM radio, sensors, Web UI control) controlled via a PS2 joystick module.
+The Arduino firmware also features a built-in mini menu with FM radio, sensor monitoring, and Web UI control, operated using a PS2 joystick module.
 
 ## How does it actually work? 🔴🟢🔵🔴🟢🔵
-6 RGB LEDs. Each RGB LED represents a combination of hours, minutes and seconds.
+The clock uses 6 RGB LEDs, where each LED represents a combination of hours, minutes, and seconds.
 
-Each RGB LED has three colors: red, green and blue. By mixing these colors, you can create CMYW colors.
+Each RGB LED consists of three color channels: red, green, and blue. By combining these colors, additional CMY and white color values can be created.
 
-The **1st and 2nd LEDs** can only represent minutes and seconds.
+The 1st and 2nd LEDs are used only for representing minutes and seconds.
 
 <img src="Images/rgb-binary-clock-logic.png"/>
 
@@ -59,15 +60,15 @@ For example, in the table above, the LED colors correspond to a specific time:
 
 **Blue** = seconds
 
-Understanding color combinations lets you read the time visually.
+Understanding the color combinations allows you to read the time visually.
 
-The logic uses binary-weighted 6-bit representations for the **RGB LEDs** and operates on a 12-hour format.
+The clock uses binary-weighted 6-bit representations for the RGB LEDs and operates in a 12-hour format.
 
-The **LEDs**, starting from the first (top) one, represent binary values: 1, 2, 4, 8, 16, 32 for minutes and seconds.
+Starting from the first (top) LED, the binary values are assigned as follows:
 
-Hours start from the **3rd LED**: 1, 2, 4, 8.
+* **Minutes and seconds:** 1, 2, 4, 8, 16, 32
+* **Hours:** starting from the 3rd LED: 1, 2, 4, 8
 
-You can physically rearrange the LEDs or adjust it in the code.
 
 ## License 📄
 [MIT](LICENSE)
