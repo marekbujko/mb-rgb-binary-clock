@@ -17,18 +17,13 @@ This repository contains a modernized version of my original RGB Binary Clock pr
 
 
 **Hardware requirements**
-
 * Arduino Nano, 6x RGB LEDs with resistors
-
 * I2C: RTC DS3231/DS3232, LCD 16x2, TEA5767 (FM Radio), PCA8574 I2C IO expansion board
-
 * Active buzzer, PS2 joystick
 
 
 **Optional**
-
 * I2C: SHT30 (temp & humidity), BMP280 (temp & pressure)
-
 * RF: LoRa MeshCore Companion Radio Clients
 
 The project outputs various data through the Serial Monitor at a baud rate of 115200 and includes a Web UI for complete control, with support for the Novation Launchpad X!
